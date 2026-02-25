@@ -1,0 +1,85 @@
+package com.nouradine.springgestion.Dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nouradine.springgestion.Model.Adresse;
+import com.nouradine.springgestion.Model.Entreprise;
+import com.nouradine.springgestion.Model.Role;
+import com.nouradine.springgestion.Model.Utilisateur;
+import lombok.Builder;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Data
+@Builder
+public class UtilisateurDto {
+    private  Long id;
+
+
+    private String nom;
+
+    private String prenom;
+
+    private String email;
+
+    private Instant dateDeNaissance;
+
+    private String moteDePasse;
+
+    private AdresseDto adresse;
+
+    private String photo;
+
+
+    private EntrepriseDto entreprise;
+
+
+
+    private List<RoleDto> roles;
+
+    public static UtilisateurDto fromEntity(Utilisateur utilisateur) {
+        if (utilisateur == null) {
+            return null;
+        }
+
+        return UtilisateurDto.builder()
+                .id(utilisateur.getId())
+                .nom(utilisateur.getNom())
+                .prenom(utilisateur.getPrenom())
+                .email(utilisateur.getEmail())
+                .moteDePasse(utilisateur.getMoteDePasse())
+                .dateDeNaissance(utilisateur.getDateDeNaissance())
+                .adresse(AdresseDto.fromEntity(utilisateur.getAdresse()))
+                .photo(utilisateur.getPhoto())
+                .entreprise(EntrepriseDto.fromEntity(utilisateur.getEntreprise()))
+                .roles(
+                        utilisateur.getRoles() != null ?
+                                utilisateur.getRoles().stream()
+                                        .map(RoleDto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
+                .build();
+    }
+
+    public static Utilisateur toEntity(UtilisateurDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(dto.getId());
+        utilisateur.setNom(dto.getNom());
+        utilisateur.setPrenom(dto.getPrenom());
+        utilisateur.setEmail(dto.getEmail());
+        utilisateur.setMoteDePasse(dto.getMoteDePasse());
+        utilisateur.setDateDeNaissance(dto.getDateDeNaissance());
+        utilisateur.setAdresse(AdresseDto.toEntity(dto.getAdresse()));
+        utilisateur.setPhoto(dto.getPhoto());
+        utilisateur.setEntreprise(EntrepriseDto.toEntity(dto.getEntreprise()));
+
+        return utilisateur;
+    }
+}

@@ -1,0 +1,13 @@
+package com.nouradine.springgestion;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SpringGestionApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
